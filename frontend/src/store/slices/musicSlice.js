@@ -38,6 +38,9 @@ const musicSlice = createSlice({
       state.uploadLoading = false
       state.uploadSuccess = true
     },
+    removeSong(state, action) {
+      state.songs = state.songs.filter(song => song._id !== action.payload)
+    },
     setError(state, action) {
       state.error = action.payload
       state.loading = false
@@ -53,6 +56,6 @@ const musicSlice = createSlice({
 export const {
   setLoading, setUploadLoading, setUploadSuccess,
   setSongs, setAlbums, setCurrentAlbum,
-  addSong, addAlbum, setError, resetUpload,
+  addSong, addAlbum, removeSong, setError, resetUpload,
 } = musicSlice.actions
 export default musicSlice.reducer

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { musicService } from '../services/musicService'
 import {
   setLoading, setUploadLoading, setSongs, setAlbums,
-  setCurrentAlbum, addSong, addAlbum, setError, resetUpload,
+  setCurrentAlbum, addSong, addAlbum, removeSong, setError, resetUpload,
 } from '../store/slices/musicSlice'
 
 export function useMusic() {
@@ -64,12 +64,23 @@ export function useMusic() {
     }
   }
 
+  const deleteTrack = async (id) => {
+    try {
+      await musicService.deleteTrack(id)
+      dispatch(removeSong(id))
+      return { success: true }
+    } catch (err) {
+      dispatch(setError(err.message))
+      return { success: false, error: err.message }
+    }
+  }
+
   const clearUpload = () => dispatch(resetUpload())
 
   return {
     songs, albums, currentAlbum, loading, error,
     uploadLoading, uploadSuccess,
     fetchSongs, fetchAlbums, fetchAlbumById,
-    uploadTrack, createAlbum, clearUpload,
+    uploadTrack, createAlbum, deleteTrack, clearUpload,
   }
 }

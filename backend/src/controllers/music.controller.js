@@ -100,5 +100,33 @@ async function getAlbumById(req, res) {
 
 }
 
+async function deleteMusic(req, res) {
+    const { id } = req.params;
 
-module.exports = { createMusic, createAlbum, getAllMusics, getAllAlbums, getAlbumById }
+    try {
+        const music = await musicModel.findById(id);
+
+        if (!music) {
+            return res.status(404).json({ message: "Music not found" });
+        }
+
+        if (music.artist.toString() !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized to delete this track" });
+        }
+
+        await musicModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            message: "Music deleted successfully"
+        });
+    } catch (error) {
+        console.error("Delete music failed:", error);
+        return res.status(500).json({
+            message: "Failed to delete track",
+            error: error.message,
+        });
+    }
+}
+
+
+module.exports = { createMusic, createAlbum, getAllMusics, getAllAlbums, getAlbumById, deleteMusic }

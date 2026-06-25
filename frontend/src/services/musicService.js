@@ -30,4 +30,10 @@ export const musicService = {
     const res = await api.get(`/music/albums/${albumId}`)
     return res.data
   },
+
+  // Artist: delete a track
+  async deleteTrack(id) {
+    const res = await api.delete(`/music/${id}`)
+    return res.data
+  },
 }
