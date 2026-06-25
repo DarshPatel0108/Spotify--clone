@@ -3,9 +3,7 @@ import api from './api'
 export const musicService = {
   // Artist: upload a track (multipart)
   async uploadTrack(formData) {
-    const res = await api.post('/music/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    const res = await api.post('/music/upload', formData)
     return res.data
   },
 

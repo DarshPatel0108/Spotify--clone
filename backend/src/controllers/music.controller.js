@@ -8,23 +8,35 @@ async function createMusic(req, res) {
     const { title } = req.body;
     const file = req.file;
 
-    const result = await uploadFile(file.buffer.toString('base64'))
+    if (!file) {
+        return res.status(400).json({ message: "No music file provided" });
+    }
 
-    const music = await musicModel.create({
-        uri: result.url,
-        title,
-        artist: req.user.id,
-    })
+    try {
+        const result = await uploadFile(file);
 
-    res.status(201).json({
-        message: "Music created successfully",
-        music: {
-            id: music._id,
-            uri: music.uri,
-            title: music.title,
-            artist: music.artist,
-        }
-    })
+        const music = await musicModel.create({
+            uri: result.url,
+            title,
+            artist: req.user.id,
+        })
+
+        return res.status(201).json({
+            message: "Music created successfully",
+            music: {
+                id: music._id,
+                uri: music.uri,
+                title: music.title,
+                artist: music.artist,
+            }
+        })
+    } catch (error) {
+        console.error("Music upload failed:", error);
+        return res.status(500).json({
+            message: "Track upload failed",
+            error: error.message,
+        });
+    }
 
 }
 
