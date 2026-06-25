@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import api from '../../services/api'
 
 const stored = localStorage.getItem('sw_user')
 
@@ -38,4 +39,18 @@ const authSlice = createSlice({
 })
 
 export const { setLoading, loginSuccess, logoutSuccess, setError, clearError } = authSlice.actions
+
+export const bootstrapAuth = () => async (dispatch) => {
+  try {
+    const res = await api.get('/auth/me')
+    if (res.data?.user) {
+      dispatch(loginSuccess(res.data.user))
+    } else {
+      dispatch(logoutSuccess())
+    }
+  } catch (_) {
+    dispatch(logoutSuccess())
+  }
+}
+
 export default authSlice.reducer

@@ -56,7 +56,7 @@ function getOriginalFileName(file) {
 }
 
 function buildLocalUrl(fileName) {
-    const baseUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = process.env.BACKEND_URL ? process.env.BACKEND_URL.replace(/\/$/, "") : "";
     return `${baseUrl}/uploads/${fileName}`;
 }
 

@@ -2,7 +2,10 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: '/api',
-  withCredentials: true,  // send JWT cookie with every request
+  withCredentials: true,
+  headers: {
+    Accept: 'application/json',
+  },
 })
 
 api.interceptors.response.use(
